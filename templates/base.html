@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>IM Student Forum</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/popup.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <a href="/" class="logo">IM Forum</a>
+
+        <ul class="nav-links">
+            <li><a href="/">Hjem</a></li>
+            <li><a href="#">Innlegg</a></li>
+            <li><a href="#">Temaer</a></li>
+        </ul>
+
+        <div class="nav-right">
+
+            {% if session.get("user_id") %}
+
+            <span class="user-greeting">
+                Hei, {{ session.username }}
+            </span>
+
+            <a class="new-post-btn" href="/create_post">Ny post</a>
+
+            <a class="logout-btn" href="/logout">Logg ut</a>
+
+            {% else %}
+
+            <button class="login-btn" onclick="openAuth()">Logg inn</button>
+
+            <button class="register-btn" onclick="openAuth(); showRegister()">Registrer</button>
+
+            {% endif %}
+
+        </div>
+
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+
+    <footer class="footer">
+        <p>IM Studentforum • 2026</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+
+</body>
+
+</html>
