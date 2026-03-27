@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="auth-page">
+
+    <div class="auth-box">
+
+        <h1>Registrer</h1>
+
+        <form method="POST">
+
+            <input type="text" name="username" placeholder="Brukernavn" required>
+
+            <input type="email" name="email" placeholder="E-post" required>
+
+            <input type="password" name="password" placeholder="Passord" required>
+
+            <button type="submit" class="main-button">
+                Registrer
+            </button>
+
+        </form>
+
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <p class="auth-link">
+            Har du allerede konto?
+            <a href="/login">Logg inn</a>
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     background: #f5f5f7;
@@ -79,14 +83,18 @@ body {
 
 /* POSTS */
 
+/* =========================
+   POSTS SECTION
+   ========================= */
+
 .posts {
-    width: 90%;
-    max-width: 1000px;
-    margin: 80px auto;
+    width: 92%;
+    max-width: 1150px;
+    margin: 60px auto;
 }
 
 .posts-header h2 {
-    font-size: 28px;
+    font-size: 26px;
     margin-bottom: 30px;
 }
 
@@ -94,52 +102,121 @@ body {
 
 .posts-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 22px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
 }
 
 /* CARD */
 
 .post-card {
     background: white;
-    padding: 22px;
-    border-radius: 18px;
+    padding: 20px;
 
-    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    border-radius: 20px;
 
-    transition: 0.2s;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+
+    transition: 0.2s ease;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .post-card:hover {
     transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.08);
 }
 
-.post-card h3 {
-    margin-top: 0;
+/* TITLE */
+
+.post-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2b2b2b;
+    text-decoration: none;
 }
 
-.post-meta {
+.post-title:hover {
+    color: #6a5cff;
+}
+
+/* CONTENT */
+
+.post-content {
     font-size: 14px;
-    color: #777;
+    color: #555;
+    line-height: 1.5;
 }
 
-/* POSTS */
+/* FOOTER */
 
-.posts {
+.post-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: auto;
+}
+
+/* AUTHOR */
+
+.post-author {
+    font-size: 13px;
+    color: #6a5cff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.post-author:hover {
+    text-decoration: underline;
+}
+
+/* DATE */
+
+.post-date {
+    font-size: 12px;
+    color: #999;
+}
+
+
+.error-msg {
+    color: red;
+    text-align: center;
+    margin: 20px;
+    font-weight: 500;
+}
+
+.profile {
     width: 90%;
     max-width: 900px;
-    margin: 60px auto;
+    margin: 40px auto;
 }
 
-.post-card {
-    background: white;
-    padding: 20px;
-    border-radius: 16px;
+.profile-header {
+    margin-bottom: 30px;
+}
+
+.profile-header h1 {
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+
+.profile-posts h2 {
     margin-bottom: 20px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
 }
 
-.hidden {
-    display: none;
+.post-actions {
+    margin-top: 10px;
 }
 
+.like-btn {
+    text-decoration: none;
+    font-size: 14px;
+    color: #666;
+    transition: 0.2s;
+}
+
+.like-btn:hover {
+    color: #e25555;
+}

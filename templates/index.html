@@ -2,6 +2,15 @@
 
 {% block content %}
 
+<!-- ERROR MESSAGES -->
+{% if request.args.get("error") == "email" %}
+<div class="error-msg">E-post finnes allerede</div>
+{% endif %}
+
+{% if request.args.get("error") == "login" %}
+<div class="error-msg">Feil e-post eller passord</div>
+{% endif %}
+
 <section class="hero">
 
     <div class="hero-container">
@@ -27,7 +36,8 @@
 
             {% else %}
 
-            <button class="main-button" onclick="openAuth(); showRegister();">
+            <!-- 🔥 ВАЖЛИВО: popup, не redirect -->
+            <button class="main-button" onclick="openRegister()">
                 Registrer for å starte diskusjon
             </button>
 
@@ -35,24 +45,18 @@
 
         </div>
 
-
         <div class="hero-visual">
-
             <img src="{{ url_for('static', filename='img/hero.png') }}" class="hero-blob">
-
         </div>
 
     </div>
 
 </section>
 
-
 <section class="posts">
 
     <div class="posts-header">
-
         <h2>Nyeste innlegg</h2>
-
     </div>
 
     <div class="posts-grid">
@@ -61,13 +65,37 @@
 
         <div class="post-card">
 
-            <h3>{{ post.title }}</h3>
+            <a href="javascript:void(0)" class="post-title" onclick="openPost(
+       `{{ post.title|escape }}`,
+       `{{ post.content|escape }}`,
+       `{{ post.username }}`,
+       `{{ post.created_at }}`
+        )">
+                {{ post.title }}
+            </a>
+            <p class="post-content">
+                {{ post.content[:140] }}{% if post.content|length > 140 %}...{% endif %}
+            </p>
 
-            <p>{{ post.content[:200] }}...</p>
+            <div class="post-footer">
 
-            <span class="post-meta">
-                {{ post.username }} • {{ post.created_at }}
-            </span>
+                <a href="/user/{{ post.username }}" class="post-author">
+                    {{ post.username }}
+                </a>
+
+                <span class="post-date">
+                    {{ post.created_at }}
+                </span>
+
+                <div class="post-actions">
+
+                    <a href="/like/{{ post.id }}" class="like-btn">
+                        ❤️ {{ post.likes }}
+                    </a>
+
+                </div>
+
+            </div>
 
         </div>
 
@@ -76,36 +104,5 @@
     </div>
 
 </section>
-
-
-<div id="authPopup" class="auth-overlay">
-
-    ```
-    <div class="auth-modal">
-
-        <h2 id="authTitle" class="auth-title">Logg inn</h2>
-        <button class="close-btn" onclick="closeAuth()">✕</button>
-
-        <form id="authForm" method="POST" action="/login">
-        
-
-            <input id="usernameField" class="hidden" type="text" name="username" placeholder="Brukernavn">
-
-            <input type="email" name="email" placeholder="E-post" required>
-
-            <input type="password" name="password" placeholder="Passord" required>
-
-            <button id="authSubmit" type="submit" class="auth-submit">
-                Logg inn
-            </button>
-
-        </form>
-
-    </div>
-   
-
-</div>
-
-
 
 {% endblock %}

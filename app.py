@@ -1,35 +1,38 @@
-from flask import Flask, render_template, request, redirect, session, url_for
+from flask import Flask, render_template, request, redirect, session
 import mysql.connector
+from werkzeug.security import generate_password_hash, check_password_hash
 from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB, MYSQL_PORT, SECRET_KEY
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
 
+
 def get_db_connection():
-   return mysql.connector.connect(
-   host=MYSQL_HOST,
-   user=MYSQL_USER,
-   password=MYSQL_PASSWORD,
-   database=MYSQL_DB,
-   port=MYSQL_PORT
-)
+    return mysql.connector.connect(
+        host=MYSQL_HOST,
+        user=MYSQL_USER,
+        password=MYSQL_PASSWORD,
+        database=MYSQL_DB,
+        port=MYSQL_PORT
+    )
+
 
 @app.route("/")
 def home():
-
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
     cursor.execute("""
         SELECT
-            posts.id,
-            posts.title,
-            posts.content,
-            posts.created_at,
-            users.username
-        FROM posts
-        JOIN users ON posts.user_id = users.id
-        ORDER BY posts.created_at DESC
+          posts.id,
+          posts.title,
+          posts.content,
+          posts.created_at,
+          posts.likes,
+          users.username
+       FROM posts
+       JOIN users ON posts.user_id = users.id
+       ORDER BY posts.created_at DESC
     """)
 
     posts = cursor.fetchall()
@@ -39,38 +42,8 @@ def home():
 
     return render_template("index.html", posts=posts)
 
-@app.route("/register", methods=["POST"])
-def register():
 
-    username = request.form["username"]
-    email = request.form["email"]
-    password = request.form["password"]
-
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-
-    cursor.execute(
-        "INSERT INTO users (username, email, password) VALUES (%s,%s,%s)",
-        (username, email, password)
-    )
-
-    conn.commit()
-
-    cursor.execute(
-        "SELECT * FROM users WHERE email = %s",
-        (email,)
-    )
-
-    user = cursor.fetchone()
-
-    session["user_id"] = user["id"]
-    session["username"] = user["username"]
-
-    cursor.close()
-    conn.close()
-
-    return redirect("/")
-
+# 🔹 LOGIN
 @app.route("/login", methods=["POST"])
 def login():
 
@@ -78,39 +51,98 @@ def login():
     password = request.form["password"]
 
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cur = conn.cursor(dictionary=True)
 
-    cursor.execute(
-        "SELECT * FROM users WHERE email=%s AND password=%s",
-        (email, password)
-    )
+    cur.execute("SELECT * FROM users WHERE email = %s", (email,))
+    user = cur.fetchone()
 
-    user = cursor.fetchone()
-
-    cursor.close()
     conn.close()
 
-    if user:
+    if user and check_password_hash(user["password"], password):
         session["user_id"] = user["id"]
         session["username"] = user["username"]
+        return redirect("/")
 
-    return redirect("/")
+    return redirect("/?error=login")
+
+
+# 🔹 REGISTER (з авто-логіном)
+@app.route("/register", methods=["POST"])
+def register():
+
+    username = request.form["username"]
+    email = request.form["email"]
+    password = request.form["password"]
+
+    hashed = generate_password_hash(password)
+
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        cur.execute(
+            "INSERT INTO users (username, email, password) VALUES (%s,%s,%s)",
+            (username, email, hashed)
+        )
+
+        conn.commit()
+
+        user_id = cur.lastrowid
+        conn.close()
+
+        # 🔥 авто-логін
+        session["user_id"] = user_id
+        session["username"] = username
+
+        return redirect("/")
+
+    except mysql.connector.errors.IntegrityError:
+        return redirect("/?error=email")
+
 
 @app.route("/logout")
 def logout():
-
     session.clear()
-
     return redirect("/")
 
-@app.route("/create_post", methods=["GET","POST"])
-def create_post():
+
+@app.route("/user/<username>")
+def profile(username):
+
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+
+    # користувач
+    cur.execute("SELECT * FROM users WHERE username = %s", (username,))
+    user = cur.fetchone()
+
+    # пости користувача
+    cur.execute("""
+        SELECT * FROM posts
+        WHERE user_id = %s
+        ORDER BY created_at DESC
+    """, (user["id"],))
+
+    posts = cur.fetchall()
+
+    conn.close()
+
+    return render_template("profile.html", user=user, posts=posts)
+
+@app.route("/like/<int:post_id>")
+def like(post_id):
 
     if "user_id" not in session:
         return redirect("/")
 
-    return render_template("create_post.html")
+    conn = get_db_connection()
+    cur = conn.cursor()
 
+    cur.execute("UPDATE posts SET likes = likes + 1 WHERE id = %s", (post_id,))
+    conn.commit()
+    conn.close()
+
+    return redirect("/")
 
 if __name__ == "__main__":
     app.run(debug=True)

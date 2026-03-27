@@ -34,9 +34,9 @@
 
             {% if session.get("user_id") %}
 
-            <span class="user-greeting">
+            <a href="/user/{{ session.username }}" class="user-greeting">
                 Hei, {{ session.username }}
-            </span>
+            </a>
 
             <a class="new-post-btn" href="/create_post">Ny post</a>
 
@@ -44,9 +44,9 @@
 
             {% else %}
 
-            <button class="login-btn" onclick="openAuth()">Logg inn</button>
+            <button class="login-btn" onclick="openLogin()">Logg inn</button>
 
-            <button class="register-btn" onclick="openAuth(); showRegister()">Registrer</button>
+            <button class="register-btn" onclick="openRegister()">Registrer</button>
 
             {% endif %}
 
@@ -60,6 +60,58 @@
     <footer class="footer">
         <p>IM Studentforum • 2026</p>
     </footer>
+
+    <!-- LOGIN / REGISTER MODAL -->
+
+    <div id="loginModal" class="modal">
+
+        <div class="modal-content">
+
+            <span class="close-btn" onclick="closeLogin()">✕</span>
+
+            <h2 id="modalTitle" class="modal-title">Logg inn</h2>
+            <form id="modalForm" method="POST" action="/login" autocomplete="off">
+
+                <input id="usernameField" class="hidden" type="text" name="username" placeholder="Brukernavn"
+                    autocomplete="off">
+
+                <input type="email" name="email" placeholder="E-post" autocomplete="off" required>
+
+                <input type="password" name="password" placeholder="Passord" autocomplete="new-password" required>
+
+                <button id="modalButton" class="modal-btn" type="submit">
+                    Logg inn
+                </button>
+
+            </form>
+
+            <p class="modal-register">
+                <span id="modalSwitchText">Har du ikke konto?</span>
+                <a href="#" onclick="switchMode(event)">Registrer</a>
+            </p>
+
+        </div>
+
+    </div>
+
+    <div id="postModal" class="modal">
+
+    <div class="modal-content post-modal">
+
+        <span class="close-btn" onclick="closePost()">✕</span>
+
+        <h2 id="postTitle"></h2>
+
+        <p id="postContent"></p>
+
+        <div class="post-meta">
+            <span id="postAuthor"></span>
+            <span id="postDate"></span>
+        </div>
+
+    </div>
+
+</div>
 
     <script src="{{ url_for('static', filename='index.js') }}"></script>
 
