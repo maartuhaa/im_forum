@@ -19,31 +19,57 @@ def get_db_connection():
 
 @app.route("/")
 def home():
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
 
-    cursor.execute("""
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+
+    user_id = session.get("user_id", 0)
+
+    # POSTS + likes 
+    cur.execute("""
         SELECT
-          posts.id,
-          posts.title,
-          posts.content,
-          posts.created_at,
-          posts.likes,
-          users.username
-       FROM posts
-       JOIN users ON posts.user_id = users.id
-       ORDER BY posts.created_at DESC
+            posts.id,
+            posts.title,
+            posts.content,
+            posts.created_at,
+            users.username,
+
+            COUNT(post_likes.id) as likes,
+
+            MAX(CASE WHEN post_likes.user_id = %s THEN 1 ELSE 0 END) as liked
+
+        FROM posts
+        JOIN users ON posts.user_id = users.id
+        LEFT JOIN post_likes ON posts.id = post_likes.post_id
+
+        GROUP BY posts.id
+        ORDER BY posts.created_at DESC
+    """, (user_id,))
+
+    posts = cur.fetchall()
+
+    # COMMENTS
+    cur.execute("""
+        SELECT
+            comments.post_id,
+            comments.content,
+            users.username,
+            comments.created_at
+        FROM comments
+        JOIN users ON comments.user_id = users.id
+        ORDER BY comments.created_at ASC
     """)
 
-    posts = cursor.fetchall()
+    comments = cur.fetchall()
 
-    cursor.close()
     conn.close()
 
-    return render_template("index.html", posts=posts)
+    return render_template(
+        "index.html",
+        posts=posts,
+        comments=comments
+    )
 
-
-# 🔹 LOGIN
 @app.route("/login", methods=["POST"])
 def login():
 
@@ -66,7 +92,6 @@ def login():
     return redirect("/?error=login")
 
 
-# 🔹 REGISTER (з авто-логіном)
 @app.route("/register", methods=["POST"])
 def register():
 
@@ -138,7 +163,46 @@ def like(post_id):
     conn = get_db_connection()
     cur = conn.cursor()
 
-    cur.execute("UPDATE posts SET likes = likes + 1 WHERE id = %s", (post_id,))
+    cur.execute(
+      "SELECT * FROM post_likes WHERE user_id = %s AND post_id = %s",
+      (session["user_id"], post_id)
+    )
+
+    existing = cur.fetchone()
+
+    if existing:
+        # якщо вже лайкнув → прибрати лайк
+        cur.execute(
+            "DELETE FROM post_likes WHERE user_id = %s AND post_id = %s",
+            (session["user_id"], post_id)
+        )
+    else:
+        # якщо не лайкнув → додати
+        cur.execute(
+            "INSERT INTO post_likes (user_id, post_id) VALUES (%s, %s)",
+            (session["user_id"], post_id)
+        )
+        conn.commit()
+        conn.close()
+    
+        return redirect("/")
+
+@app.route("/comment/<int:post_id>", methods=["POST"])
+def add_comment(post_id):
+
+    if "user_id" not in session:
+        return redirect("/")
+
+    content = request.form["content"]
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        "INSERT INTO comments (content, user_id, post_id) VALUES (%s, %s, %s)",
+        (content, session["user_id"], post_id)
+    )
+
     conn.commit()
     conn.close()
 
