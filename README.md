@@ -56,6 +56,19 @@ The application allows students to create posts, interact with others, and explo
 
 ---
 
+## Cyber Security – Yrkesfaglig fordypning
+
+I dette prosjektet har jeg brukt grunnleggende prinsipper fra cybersecurity for å gjøre forumet sikrere.
+
+Passord lagres som hash ved hjelp av `werkzeug.security`, slik at de ikke ligger i klartekst i databasen. Kun innloggede brukere kan like innlegg og skrive kommentarer, noe som kontrolleres gjennom session i backend.
+
+For å beskytte mot angrep bruker jeg parameteriserte SQL-spørringer (`%s`) for å forhindre SQL injection, samt Jinja2 escaping (`|escape`) for å redusere risiko for XSS.
+
+Databasen er også strukturert slik at en bruker ikke kan like samme innlegg flere ganger, ved å bruke en egen tabell for likes.
+
+Dette viser hvordan grunnleggende sikkerhet kan implementeres i praksis i en webapplikasjon.
+
+---
 ## Installation
 
 1. Clone the repository:
