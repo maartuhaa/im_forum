@@ -1,53 +1,53 @@
-﻿# IM Student Forum
+# IM Student Forum
 
-IM Student Forum is a web-based discussion platform built with Flask and MariaDB.  
-The application allows students to create posts, interact with others, and explore programming-related topics in a clean and modern interface.
-
----
-
-## Features
-
-- User authentication (register, login, logout)
-- Create and view posts
-- Like system (toggle like/unlike per user)
-- User profiles with personal posts
-- Modern UI with modal popups (login, register, post view)
-- Responsive layout
+IM Student Forum er en webbasert diskusjonsplattform utviklet med Flask og MariaDB.  
+Applikasjonen lar elever opprette innlegg, samhandle med andre og utforske temaer innen programmering i et rent og moderne grensesnitt.
 
 ---
 
-## Tech Stack
+## Funksjoner
+
+- Brukerautentisering (registrering, innlogging, utlogging)
+- Opprette og vise innlegg
+- Like-system (like/unlike per bruker)
+- Brukerprofiler med egne innlegg
+- Moderne UI med popup-vinduer (innlogging, registrering, visning av innlegg)
+- Responsivt design
+
+---
+
+## Teknologier
 
 - **Backend:** Flask (Python)
 - **Database:** MariaDB (MySQL)
 - **Frontend:** HTML, CSS, JavaScript
-- **Authentication:** Flask sessions + password hashing
+- **Autentisering:** Flask sessions + passord-hashing
 
 ---
 
-## Database Structure
+## Databasestruktur
 
-### Users
+### Brukere
 - id
 - username
 - email
 - password
 - created_at
 
-### Posts
+### Innlegg
 - id
 - title
 - content
 - user_id
-- theme_id (optional)
+- theme_id (valgfritt)
 - created_at
 
-### Post Likes
+### Likes på innlegg
 - id
 - user_id
 - post_id
 
-### Comments (planned / optional)
+### Kommentarer 
 - id
 - content
 - user_id
@@ -56,20 +56,21 @@ The application allows students to create posts, interact with others, and explo
 
 ---
 
-## Cyber Security – Yrkesfaglig fordypning
+## 🔐 Cybersikkerhet – Yrkesfaglig fordypning
 
-I dette prosjektet har jeg brukt grunnleggende prinsipper fra cybersecurity for å gjøre forumet sikrere.
+I dette prosjektet har jeg brukt grunnleggende prinsipper fra cybersikkerhet for å gjøre forumet sikrere.
 
-Passord lagres som hash ved hjelp av `werkzeug.security`, slik at de ikke ligger i klartekst i databasen. Kun innloggede brukere kan like innlegg og skrive kommentarer, noe som kontrolleres gjennom session i backend.
+Passord lagres som hash ved hjelp av `werkzeug.security`, slik at de ikke lagres i klartekst i databasen. Kun innloggede brukere kan like innlegg og skrive kommentarer, noe som kontrolleres gjennom sessions i backend.
 
-For å beskytte mot angrep bruker jeg parameteriserte SQL-spørringer (`%s`) for å forhindre SQL injection, samt Jinja2 escaping (`|escape`) for å redusere risiko for XSS.
+For å beskytte mot angrep bruker jeg parameteriserte SQL-spørringer (`%s`) for å forhindre SQL injection, samt Jinja2 escaping (`|escape`) for å redusere risikoen for XSS.
 
 Databasen er også strukturert slik at en bruker ikke kan like samme innlegg flere ganger, ved å bruke en egen tabell for likes.
 
 Dette viser hvordan grunnleggende sikkerhet kan implementeres i praksis i en webapplikasjon.
 
 ---
-## Installation
 
-1. Clone the repository:
-https://github.com/maartuhaa/im_forum.git
+## Installasjon
+
+1. Klon repository:
+git clone https://github.com/maartuhaa/im_forum.git
