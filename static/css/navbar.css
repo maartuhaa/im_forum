@@ -27,12 +27,10 @@
     font-weight: 700;
 
     background: linear-gradient(135deg, #6a5cff, #8b7bff);
-    -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
-
     letter-spacing: -0.5px;
 }
-
 
 
 .nav-links {

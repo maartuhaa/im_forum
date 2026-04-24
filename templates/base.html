@@ -11,7 +11,6 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/popup.css') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -96,22 +95,41 @@
 
     <div id="postModal" class="modal">
 
-    <div class="modal-content post-modal">
+        <div class="modal-content post-modal">
 
-        <span class="close-btn" onclick="closePost()">✕</span>
+            <span class="close-btn" onclick="closePost()">✕</span>
 
-        <h2 id="postTitle"></h2>
+            <h2 id="postTitle"></h2>
 
-        <p id="postContent"></p>
+            <p id="postContent"></p>
 
-        <div class="post-meta">
-            <span id="postAuthor"></span>
-            <span id="postDate"></span>
+            <div class="post-meta">
+                <span id="postAuthor"></span>
+                <span id="postDate"></span>
+            </div>
+
+            <!-- COMMENTS -->
+            <div id="commentsContainer" class="comments"></div>
+
+            <!-- COMMENT FORM -->
+            {% if session.get("user_id") %}
+
+            <form id="commentForm">
+                <input type="text" name="content" placeholder="Write a comment..." required>
+                <button type="submit">Send</button>
+            </form>
+
+            {% else %}
+
+            <p class="login-warning">
+                You must <span onclick="openLogin()">log in</span> to comment
+            </p>
+
+            {% endif %}
+
         </div>
 
     </div>
-
-</div>
 
     <script src="{{ url_for('static', filename='index.js') }}"></script>
 

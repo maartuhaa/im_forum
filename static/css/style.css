@@ -81,7 +81,52 @@ body {
     transform: rotate(-10deg);
 }
 
-/* POSTS */
+
+/* login warning */
+
+.login-warning {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #666;
+}
+
+.login-warning span {
+    color: #6a5cff;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+/* =========================
+   OTHER
+   ========================= */
+
+.error-msg {
+    color: red;
+    text-align: center;
+    margin: 20px;
+    font-weight: 500;
+}
+
+/* PROFILE */
+
+.profile {
+    width: 90%;
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+.profile-header {
+    margin-bottom: 30px;
+}
+
+.profile-header h1 {
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+
+.profile-posts h2 {
+    margin-bottom: 20px;
+}
 
 /* =========================
    POSTS SECTION
@@ -94,8 +139,10 @@ body {
 }
 
 .posts-header h2 {
-    font-size: 26px;
+    font-size: 28px;
     margin-bottom: 30px;
+    font-weight: 600;
+    color: #1f1f1f;
 }
 
 /* GRID */
@@ -110,22 +157,37 @@ body {
 
 .post-card {
     background: white;
-    padding: 20px;
+    padding: 22px;
 
     border-radius: 20px;
 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
 
-    transition: 0.2s ease;
+    transition: all 0.2s ease;
 
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
+
+    position: relative;
+    overflow: hidden;
 }
 
 .post-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-5px);
     box-shadow: 0 18px 40px rgba(0,0,0,0.08);
+}
+
+/* subtle top accent */
+
+.post-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #6a5cff, #8f7bff);
 }
 
 /* TITLE */
@@ -135,6 +197,7 @@ body {
     font-weight: 600;
     color: #2b2b2b;
     text-decoration: none;
+    line-height: 1.3;
 }
 
 .post-title:hover {
@@ -146,7 +209,7 @@ body {
 .post-content {
     font-size: 14px;
     color: #555;
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
 /* FOOTER */
@@ -179,44 +242,480 @@ body {
     color: #999;
 }
 
-
-.error-msg {
-    color: red;
-    text-align: center;
-    margin: 20px;
-    font-weight: 500;
-}
-
-.profile {
-    width: 90%;
-    max-width: 900px;
-    margin: 40px auto;
-}
-
-.profile-header {
-    margin-bottom: 30px;
-}
-
-.profile-header h1 {
-    font-size: 32px;
-    margin-bottom: 5px;
-}
-
-.profile-posts h2 {
-    margin-bottom: 20px;
-}
+/* ACTIONS */
 
 .post-actions {
-    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
+/* LIKE BUTTON */
+
 .like-btn {
-    text-decoration: none;
     font-size: 14px;
     color: #666;
+    background: #f6f6f6;
+    padding: 6px 10px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
     transition: 0.2s;
 }
 
 .like-btn:hover {
+    background: #ffecec;
     color: #e25555;
+}
+
+.like-btn.disabled {
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+
+
+
+.comments {
+    border-top: 1px solid #eee;
+    padding-top: 16px;
+
+    max-height: 300px;
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* COMMENT */
+
+.comment {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* TEXT */
+
+.comment p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #2b2b2b;
+}
+
+.comment b {
+    font-weight: 600;
+    color: #111;
+}
+
+/* REPLY BUTTON */
+
+.reply-btn {
+    font-size: 12px;
+    color: #6a5cff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: fit-content;
+
+    transition: 0.2s;
+}
+
+.reply-btn:hover {
+    text-decoration: underline;
+    color: #4d3df5;
+}
+
+/* THREAD LINE */
+
+.replies {
+    margin-left: 18px;
+    padding-left: 12px;
+    border-left: 2px solid #ddd;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* LIMIT DEPTH */
+
+.replies .replies {
+    margin-left: 10px;
+}
+
+.replies .replies .replies {
+    margin-left: 0;
+    border-left: none;
+}
+
+/* INPUT */
+
+#commentForm {
+    margin-top: 20px;
+}
+
+#commentForm input {
+    width: 100%;
+    padding: 14px;
+
+    border-radius: 20px;
+    border: 1px solid #ddd;
+
+    font-size: 14px;
+    background: #fafafa;
+}
+
+#commentForm input:focus {
+    outline: none;
+    border-color: #6a5cff;
+    background: white;
+}
+
+#commentForm button {
+    margin-top: 10px;
+
+    padding: 10px 16px;
+    border-radius: 14px;
+
+    background: #6a5cff;
+    color: white;
+    border: none;
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+#commentForm button:hover {
+    background: #5848e0;
+}
+
+/* SCROLLBAR */
+
+.comments::-webkit-scrollbar {
+    width: 6px;
+}
+
+.comments::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+
+/* =========================
+   FULL WIDTH POST MODAL
+   ========================= */
+
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* ❗ не по центру вертикально */
+    padding: 40px 20px;
+}
+
+/* розтягуємо popup */
+
+.post-modal {
+    width: 100%;
+    max-width: 900px;   /* зроби 1000px якщо хочеш ще ширше */
+
+    margin: 0 auto;
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: stretch; /* ❗ щоб не центрувало */
+}
+
+/* контент зліва */
+
+#postTitle {
+    text-align: left;
+}
+
+#postContent {
+    text-align: left;
+}
+
+.post-meta {
+    justify-content: flex-start;
+}
+
+/* коментарі на всю ширину */
+
+.comments {
+    width: 100%;
+}
+
+/* форма теж */
+
+#commentForm {
+    width: 100%;
+}
+
+#commentForm input {
+    width: 100%;
+}
+
+/* =========================
+   FIX POPUP LAYOUT
+   ========================= */
+
+/* затемнення фону */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+
+    display: flex;
+    justify-content: center;
+    align-items: center; /* повертаємо нормальне центрування */
+
+    padding: 20px;
+}
+
+/* сам popup */
+
+.post-modal {
+    background: white;
+
+    width: 100%;
+    max-width: 700px;   /* ❗ зробили нормальну ширину */
+
+    padding: 30px;
+    border-radius: 20px;
+
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* прибираємо зайве розтягування */
+
+.comments {
+    max-height: 300px;
+}
+
+/* щоб не було "вузької колонки" */
+
+body.modal-open {
+    overflow: hidden;
+}
+
+/* ---------- AUTH PAGES (login.html / register.html) ---------- */
+
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+}
+
+.auth-box {
+    width: 380px;
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.auth-box input {
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+}
+
+.error {
+    color: #e74c3c;
+}
+
+.auth-link {
+    text-align: center;
+}
+
+
+/* ---------- MODAL (popup login/register) ---------- */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.4);
+
+    z-index: 1000;
+}
+
+.modal-content {
+    width: 420px;
+
+    background: white;
+
+    padding: 50px 40px;
+
+    border-radius: 30px;
+
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 18px;
+}
+
+.modal-title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+/* inputs */
+
+.modal-content input {
+    width: 100%;
+    padding: 16px 16px;
+
+    border-radius: 16px;
+   border: none;
+
+    background: #eef1f7;
+
+    font-size: 15px;
+
+    outline: none;
+
+    margin-bottom: 12px;
+    /* 👈 ось це додає відступ */
+     box-sizing: border-box;
+}
+
+/* button */
+
+.modal-btn {
+    width: 100%;
+
+    padding: 16px;
+
+    border: none;
+    border-radius: 18px;
+
+    background: linear-gradient(135deg, #6c63ff, #7a6cff);
+
+    color: white;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+    margin-top: 8px;
+    transition: 0.2s;
+}
+
+.modal-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(108, 99, 255, 0.3);
+}
+
+/* close */
+
+.close-btn {
+    position: absolute;
+    top: 18px;
+    right: 22px;
+
+    font-size: 20px;
+}
+
+/* switch text */
+
+.modal-register {
+    text-align: center;
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+.modal-register a {
+    color: #6c63ff;
+    font-weight: 600;
+}
+
+/* hidden */
+
+.hidden {
+    display: none;
+}
+
+
+#usernameField {
+    width: 100%;
+}
+
+
+/*post*/
+
+.post-modal {
+    max-width: 650px;   /* нормальна ширина */
+    width: 100%;        /* замість 90% */
+
+    padding: 30px;
+    border-radius: 24px;
+    background: white;
+
+    display: flex;
+    flex-direction: column;
+
+    margin: auto;       /* центрує */
+}
+
+/* TITLE */
+
+#postTitle {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* CONTENT */
+
+#postContent {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #444;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* META */
+
+.post-meta {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+
+    font-size: 13px;
+    color: #888;
+
+    margin-bottom: 20px;
 }

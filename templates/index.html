@@ -66,14 +66,12 @@
         <div class="post-card">
 
             <a href="javascript:void(0)" class="post-title" onclick="openPost(
-       `{{ post.title|escape }}`,
-       `{{ post.content|escape }}`,
-       `{{ post.username }}`,
-       `{{ post.created_at }}`,
-       `{{ post.id }}`,
-       `{{ post.title|escape }}`,
-       `{{ post.content|escape }}`
-        )">
+                  '{{ post.title|escape }}',
+                  '{{ post.content|escape }}',
+                  '{{ post.username }}',
+                  '{{ post.created_at }}',
+                   {{ post.id }}
+                )">
                 {{ post.title }}
             </a>
             <p class="post-content">
@@ -91,11 +89,19 @@
                 </span>
 
                 <div class="post-actions">
+                    {% if session.get("user_id") %}
 
-                    <a href="/like/{{ post.id }}" class="like-btn">
+                    <button class="like-btn" onclick="likePost({{ post.id }})">
+                        ❤️ <span id="likes-{{ post.id }}">{{ post.likes }}</span>
+                    </button>
+
+                    {% else %}
+
+                    <button class="like-btn disabled" onclick="openLogin()">
                         ❤️ {{ post.likes }}
-                    </a>
+                    </button>
 
+                    {% endif %}
                 </div>
 
             </div>

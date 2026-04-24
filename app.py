@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, session
 import mysql.connector
+import html
+from flask import jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB, MYSQL_PORT, SECRET_KEY
 
@@ -154,59 +156,91 @@ def profile(username):
 
     return render_template("profile.html", user=user, posts=posts)
 
+from flask import jsonify
+
 @app.route("/like/<int:post_id>")
 def like(post_id):
 
     if "user_id" not in session:
-        return redirect("/")
+        return jsonify({"error": "unauthorized"}), 401
 
     conn = get_db_connection()
-    cur = conn.cursor()
+    cur = conn.cursor(dictionary=True)
 
+    # чи вже є лайк
     cur.execute(
-      "SELECT * FROM post_likes WHERE user_id = %s AND post_id = %s",
-      (session["user_id"], post_id)
+        "SELECT id FROM post_likes WHERE user_id = %s AND post_id = %s",
+        (session["user_id"], post_id)
     )
-
     existing = cur.fetchone()
 
     if existing:
-        # якщо вже лайкнув → прибрати лайк
         cur.execute(
             "DELETE FROM post_likes WHERE user_id = %s AND post_id = %s",
             (session["user_id"], post_id)
         )
+        liked = False
     else:
-        # якщо не лайкнув → додати
         cur.execute(
             "INSERT INTO post_likes (user_id, post_id) VALUES (%s, %s)",
             (session["user_id"], post_id)
         )
-        conn.commit()
-        conn.close()
-    
-        return redirect("/")
+        liked = True
+
+    conn.commit()
+
+    # нова кількість лайків
+    cur.execute(
+        "SELECT COUNT(*) as count FROM post_likes WHERE post_id = %s",
+        (post_id,)
+    )
+    count = cur.fetchone()["count"]
+
+    conn.close()
+
+    return jsonify({
+        "liked": liked,
+        "count": count
+    })
+
+from flask import jsonify
 
 @app.route("/comment/<int:post_id>", methods=["POST"])
 def add_comment(post_id):
 
     if "user_id" not in session:
-        return redirect("/")
+        return jsonify({"error": "unauthorized"}), 401
 
-    content = request.form["content"]
+    content = request.form["content"].strip()
+    parent_id = request.form.get("parent_id") 
+
+    if not content or len(content) > 300:
+        return jsonify({"error": "invalid"}), 400
 
     conn = get_db_connection()
-    cur = conn.cursor()
+    cur = conn.cursor(dictionary=True)
 
     cur.execute(
-        "INSERT INTO comments (content, user_id, post_id) VALUES (%s, %s, %s)",
-        (content, session["user_id"], post_id)
+        "INSERT INTO comments (content, user_id, post_id, parent_id) VALUES (%s, %s, %s, %s)",
+        (content, session["user_id"], post_id, parent_id)
     )
 
     conn.commit()
+
+    comment_id = cur.lastrowid
+
+    cur.execute("""
+        SELECT comments.id, comments.content, comments.parent_id, users.username
+        FROM comments
+        JOIN users ON comments.user_id = users.id
+        WHERE comments.id = %s
+    """, (comment_id,))
+
+    new_comment = cur.fetchone()
+
     conn.close()
 
-    return redirect("/")
+    return jsonify(new_comment)
 
 if __name__ == "__main__":
     app.run(debug=True)
