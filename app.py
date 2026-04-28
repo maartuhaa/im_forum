@@ -260,5 +260,54 @@ def get_comments(post_id):
 
     return jsonify(comments)
 
+@app.route("/like_comment/<int:comment_id>")
+def like_comment(comment_id):
+
+    if "user_id" not in session:
+        return jsonify({"error": "unauthorized"}), 401
+
+    user_id = session["user_id"]
+
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+
+    # перевірка чи вже лайкнув
+    cur.execute(
+        "SELECT * FROM comment_likes WHERE user_id = %s AND comment_id = %s",
+        (user_id, comment_id)
+    )
+    existing = cur.fetchone()
+
+    if existing:
+        # unlike
+        cur.execute(
+            "DELETE FROM comment_likes WHERE user_id = %s AND comment_id = %s",
+            (user_id, comment_id)
+        )
+        liked = False
+    else:
+        # like
+        cur.execute(
+            "INSERT INTO comment_likes (user_id, comment_id) VALUES (%s, %s)",
+            (user_id, comment_id)
+        )
+        liked = True
+
+    conn.commit()
+
+    # рахуємо лайки
+    cur.execute(
+        "SELECT COUNT(*) as count FROM comment_likes WHERE comment_id = %s",
+        (comment_id,)
+    )
+    count = cur.fetchone()["count"]
+
+    conn.close()
+
+    return jsonify({
+        "liked": liked,
+        "count": count
+    })
+
 if __name__ == "__main__":
     app.run(debug=True)

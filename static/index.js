@@ -80,14 +80,12 @@ function openPost(title, content, author, date, post_id) {
   }
 
   const container = document.getElementById("commentsContainer");
-  container.innerHTML = ""; // 👈 ВОНО
+  container.innerHTML = "";
 
   fetch(`/comments/${post_id}`)
     .then(res => res.json())
     .then(comments => {
-      comments.forEach(comment => {
-        renderComment(comment);
-      });
+      comments.forEach(renderComment);
     });
 
   document.getElementById("postModal").style.display = "flex";
@@ -97,7 +95,7 @@ function closePost() {
   document.getElementById("postModal").style.display = "none";
 }
 
-// ---------------- LIKE ----------------
+// ---------------- LIKE POST ----------------
 
 function likePost(postId) {
   fetch(`/like/${postId}`)
@@ -108,11 +106,28 @@ function likePost(postId) {
 
       const btn = el.closest(".like-btn");
 
-      if (data.liked) {
-        btn.classList.add("liked");
-      } else {
-        btn.classList.remove("liked");
+      btn.classList.toggle("liked", data.liked);
+    });
+}
+
+// ---------------- LIKE COMMENT ----------------
+
+function likeComment(commentId) {
+  fetch(`/like_comment/${commentId}`)
+    .then(res => res.json())
+    .then(data => {
+
+      if (data.error) {
+        openLogin();
+        return;
       }
+
+      const el = document.getElementById(`comment-likes-${commentId}`);
+      el.innerText = data.count;
+
+      const btn = el.previousSibling;
+
+      btn.classList.toggle("liked", data.liked);
     });
 }
 
@@ -126,49 +141,74 @@ function replyTo(commentId) {
   input.focus();
 }
 
+
+// ---------------- RENDER COMMENT ----------------
+
 function renderComment(data) {
   const container = document.getElementById("commentsContainer");
 
+  // root
   const commentDiv = document.createElement("div");
   commentDiv.classList.add("comment");
   commentDiv.id = "comment-" + data.id;
 
+  // text
   const p = document.createElement("p");
-
   const strong = document.createElement("b");
   strong.innerText = data.username;
-
-  const textNode = document.createTextNode(": " + data.content);
-
   p.appendChild(strong);
-  p.appendChild(textNode);
+  p.appendChild(document.createTextNode(": " + data.content));
 
+  // actions row
+  const actions = document.createElement("div");
+  actions.classList.add("comment-actions");
+
+  // reply
   const replyBtn = document.createElement("button");
   replyBtn.innerText = "Reply";
   replyBtn.classList.add("reply-btn");
   replyBtn.onclick = () => replyTo(data.id);
 
+  // like
+  const likeBtn = document.createElement("button");
+  likeBtn.innerText = "Like";
+  likeBtn.classList.add("like-btn");
+  likeBtn.onclick = () => likeComment(data.id);
+
+  // count
+  const likeCount = document.createElement("span");
+  likeCount.id = `comment-likes-${data.id}`;
+  likeCount.classList.add("like-count");
+  likeCount.innerText = data.likes_count ?? 0; // якщо з бекенду не приходить — буде 0
+
+  // зібрати actions
+  actions.appendChild(replyBtn);
+  actions.appendChild(likeBtn);
+  actions.appendChild(likeCount);
+
+  // replies container
   const repliesDiv = document.createElement("div");
   repliesDiv.classList.add("replies");
 
+  // зібрати comment
   commentDiv.appendChild(p);
-  commentDiv.appendChild(replyBtn);
+  commentDiv.appendChild(actions);
   commentDiv.appendChild(repliesDiv);
 
+  // вкладення (reply)
   if (data.parent_id) {
     const parent = document.getElementById("comment-" + data.parent_id);
-
     if (parent) {
       parent.querySelector(".replies").appendChild(commentDiv);
-    } else {
-      container.appendChild(commentDiv);
+      return;
     }
-  } else {
-    container.appendChild(commentDiv);
   }
+
+  // інакше — в корінь
+  container.appendChild(commentDiv);
 }
 
-// ---------------- COMMENT SUBMIT (ОДИН!!!) ----------------
+// ---------------- COMMENT SUBMIT ----------------
 
 document.addEventListener("submit", function (e) {
 
@@ -192,58 +232,18 @@ document.addEventListener("submit", function (e) {
     method: "POST",
     body: formData
   })
-  .then(res => res.json())
-  .then(data => {
+    .then(res => res.json())
+    .then(data => {
 
-    if (data.error) {
-      openLogin();
-      return;
-    }
-
-    const container = document.getElementById("commentsContainer");
-
-    const commentDiv = document.createElement("div");
-    commentDiv.classList.add("comment");
-    commentDiv.id = "comment-" + data.id;
-
-    const p = document.createElement("p");
-
-    const strong = document.createElement("b");
-    strong.innerText = data.username;
-
-    const textNode = document.createTextNode(": " + data.content);
-
-    p.appendChild(strong);
-    p.appendChild(textNode);
-
-    const replyBtn = document.createElement("button");
-    replyBtn.innerText = "Reply";
-    replyBtn.classList.add("reply-btn");
-    replyBtn.onclick = () => replyTo(data.id);
-
-    const repliesDiv = document.createElement("div");
-    repliesDiv.classList.add("replies");
-
-    commentDiv.appendChild(p);
-    commentDiv.appendChild(replyBtn);
-    commentDiv.appendChild(repliesDiv);
-
-    if (data.parent_id) {
-      const parent = document.getElementById("comment-" + data.parent_id);
-
-      if (parent) {
-        const replies = parent.querySelector(".replies");
-        replies.appendChild(commentDiv);
-      } else {
-        container.appendChild(commentDiv);
+      if (data.error) {
+        openLogin();
+        return;
       }
-    } else {
-      container.appendChild(commentDiv);
-    }
 
-    input.value = "";
-    input.placeholder = "Write a comment...";
-    replyToCommentId = null;
-  });
+      renderComment(data); // 🔥 замість дублювання
 
+      input.value = "";
+      input.placeholder = "Write a comment...";
+      replyToCommentId = null;
+    });
 });
