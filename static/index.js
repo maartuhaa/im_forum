@@ -79,6 +79,17 @@ function openPost(title, content, author, date, post_id) {
     form.action = `/comment/${post_id}`;
   }
 
+  const container = document.getElementById("commentsContainer");
+  container.innerHTML = ""; // 👈 ВОНО
+
+  fetch(`/comments/${post_id}`)
+    .then(res => res.json())
+    .then(comments => {
+      comments.forEach(comment => {
+        renderComment(comment);
+      });
+    });
+
   document.getElementById("postModal").style.display = "flex";
 }
 
@@ -113,6 +124,48 @@ function replyTo(commentId) {
   const input = document.querySelector("#commentForm input");
   input.placeholder = "Replying...";
   input.focus();
+}
+
+function renderComment(data) {
+  const container = document.getElementById("commentsContainer");
+
+  const commentDiv = document.createElement("div");
+  commentDiv.classList.add("comment");
+  commentDiv.id = "comment-" + data.id;
+
+  const p = document.createElement("p");
+
+  const strong = document.createElement("b");
+  strong.innerText = data.username;
+
+  const textNode = document.createTextNode(": " + data.content);
+
+  p.appendChild(strong);
+  p.appendChild(textNode);
+
+  const replyBtn = document.createElement("button");
+  replyBtn.innerText = "Reply";
+  replyBtn.classList.add("reply-btn");
+  replyBtn.onclick = () => replyTo(data.id);
+
+  const repliesDiv = document.createElement("div");
+  repliesDiv.classList.add("replies");
+
+  commentDiv.appendChild(p);
+  commentDiv.appendChild(replyBtn);
+  commentDiv.appendChild(repliesDiv);
+
+  if (data.parent_id) {
+    const parent = document.getElementById("comment-" + data.parent_id);
+
+    if (parent) {
+      parent.querySelector(".replies").appendChild(commentDiv);
+    } else {
+      container.appendChild(commentDiv);
+    }
+  } else {
+    container.appendChild(commentDiv);
+  }
 }
 
 // ---------------- COMMENT SUBMIT (ОДИН!!!) ----------------

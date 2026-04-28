@@ -242,5 +242,23 @@ def add_comment(post_id):
 
     return jsonify(new_comment)
 
+@app.route("/comments/<int:post_id>")
+def get_comments(post_id):
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+
+    cur.execute("""
+        SELECT comments.id, comments.content, comments.parent_id, users.username
+        FROM comments
+        JOIN users ON comments.user_id = users.id
+        WHERE comments.post_id = %s
+        ORDER BY comments.created_at ASC
+    """, (post_id,))
+
+    comments = cur.fetchall()
+    conn.close()
+
+    return jsonify(comments)
+
 if __name__ == "__main__":
     app.run(debug=True)

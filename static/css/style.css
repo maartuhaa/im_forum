@@ -673,11 +673,9 @@ body.modal-open {
 
 
 /*post*/
-
 .post-modal {
-    max-width: 650px;   /* нормальна ширина */
-    width: 100%;        /* замість 90% */
-
+    max-width: 650px;
+    width: 100%;
     padding: 30px;
     border-radius: 24px;
     background: white;
@@ -685,10 +683,30 @@ body.modal-open {
     display: flex;
     flex-direction: column;
 
-    margin: auto;       /* центрує */
+    max-height: 85vh;
 }
 
-/* TITLE */
+
+.comments {
+    flex: 1;              
+    overflow-y: auto;
+    margin: 15px 0;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(0, 0, 0, 0.4);
+}
 
 #postTitle {
     font-size: 24px;
@@ -697,8 +715,6 @@ body.modal-open {
     text-align: center;
 }
 
-/* CONTENT */
-
 #postContent {
     font-size: 15px;
     line-height: 1.6;
@@ -706,8 +722,6 @@ body.modal-open {
     margin-bottom: 20px;
     text-align: center;
 }
-
-/* META */
 
 .post-meta {
     display: flex;
@@ -718,4 +732,21 @@ body.modal-open {
     color: #888;
 
     margin-bottom: 20px;
+}
+
+#commentForm {
+    margin-top: 10px;
+}
+
+footer {
+    margin-top: 60px;
+    padding: 15px 0;
+
+    text-align: center;
+
+    font-size: 14px;
+    color: #777;
+
+    border-top: 1px solid #e0e0e0;
+    background: #f9f9fb;
 }
