@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, session
 import mysql.connector
-import html
 from flask import jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB, MYSQL_PORT, SECRET_KEY
@@ -27,7 +26,7 @@ def home():
 
     user_id = session.get("user_id", 0)
 
-    # POSTS + likes 
+    # 🔥 ВСІ POSTS (як було)
     cur.execute("""
         SELECT
             posts.id,
@@ -50,7 +49,23 @@ def home():
 
     posts = cur.fetchall()
 
-    # COMMENTS
+    # 🔥 НОВІ 6 ПОСТІВ (ДОДАЛИ)
+    cur.execute("""
+        SELECT
+            posts.id,
+            posts.title,
+            posts.content,
+            posts.created_at,
+            users.username
+        FROM posts
+        JOIN users ON posts.user_id = users.id
+        ORDER BY posts.created_at DESC
+        LIMIT 6
+    """)
+
+    latest_posts = cur.fetchall()
+
+    # COMMENTS (залишаємо як є)
     cur.execute("""
         SELECT
             comments.post_id,
@@ -69,7 +84,8 @@ def home():
     return render_template(
         "index.html",
         posts=posts,
-        comments=comments
+        comments=comments,
+        latest_posts=latest_posts  # 🔥 ДОДАЛИ
     )
 
 @app.route("/login", methods=["POST"])
@@ -204,6 +220,7 @@ def like(post_id):
     })
 
 from flask import jsonify
+
 
 @app.route("/comment/<int:post_id>", methods=["POST"])
 def add_comment(post_id):

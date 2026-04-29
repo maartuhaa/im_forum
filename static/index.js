@@ -30,37 +30,37 @@ function updateModal() {
   const button = document.getElementById("modalButton");
   const username = document.getElementById("usernameField");
   const text = document.getElementById("modalSwitchText");
+  const link = document.getElementById("modalSwitchLink");
 
   if (mode === "login") {
     title.innerText = "Logg inn";
     button.innerText = "Logg inn";
     form.action = "/login";
 
+    // ❌ без username
     username.classList.add("hidden");
     username.removeAttribute("required");
 
+    // ✔ текст
     text.innerText = "Har du ikke konto?";
+    link.innerText = "Registrer";
+
   } else {
     title.innerText = "Registrer";
     button.innerText = "Registrer";
     form.action = "/register";
 
+    // ✔ з username
     username.classList.remove("hidden");
     username.setAttribute("required", true);
 
+    // ✔ текст
     text.innerText = "Har du allerede konto?";
+    link.innerText = "Logg inn";
   }
 
   form.reset();
 }
-
-window.addEventListener("click", function (e) {
-  const modal = document.getElementById("loginModal");
-  if (e.target === modal) {
-    modal.style.display = "none";
-  }
-});
-
 // ---------------- POST POPUP ----------------
 
 let currentPostId = null;
@@ -96,7 +96,6 @@ function closePost() {
 }
 
 // ---------------- LIKE POST ----------------
-
 function likePost(postId) {
   fetch(`/like/${postId}`)
     .then(res => res.json())
@@ -109,6 +108,7 @@ function likePost(postId) {
       btn.classList.toggle("liked", data.liked);
     });
 }
+
 
 // ---------------- LIKE COMMENT ----------------
 
@@ -247,3 +247,4 @@ document.addEventListener("submit", function (e) {
       replyToCommentId = null;
     });
 });
+

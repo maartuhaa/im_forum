@@ -13,7 +13,7 @@ body {
 .hero {
     width: 90%;
     max-width: 1200px;
-    margin: 80px auto 40px auto;
+    margin: 80px auto 40px;
 }
 
 .hero-container {
@@ -22,8 +22,6 @@ body {
     justify-content: space-between;
     gap: 60px;
 }
-
-/* TEXT SIDE */
 
 .hero-text {
     max-width: 520px;
@@ -49,519 +47,24 @@ body {
 .main-button {
     margin-top: 30px;
     padding: 14px 26px;
-
     border: none;
     border-radius: 14px;
-
     background: #6c63ff;
     color: white;
-
     font-size: 16px;
     font-weight: 600;
-
     cursor: pointer;
     text-decoration: none;
-
     transition: 0.2s;
 }
 
 .main-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
-}
-
-/* HERO IMAGE */
-
-.hero-visual {
-    position: relative;
-}
-
-.hero-blob {
-    width: 420px;
-    transform: rotate(-10deg);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
 }
 
 
-/* login warning */
-
-.login-warning {
-    margin-top: 12px;
-    font-size: 14px;
-    color: #666;
-}
-
-.login-warning span {
-    color: #6a5cff;
-    cursor: pointer;
-    font-weight: 500;
-}
-
-/* =========================
-   OTHER
-   ========================= */
-
-.error-msg {
-    color: red;
-    text-align: center;
-    margin: 20px;
-    font-weight: 500;
-}
-
-/* PROFILE */
-
-.profile {
-    width: 90%;
-    max-width: 900px;
-    margin: 40px auto;
-}
-
-.profile-header {
-    margin-bottom: 30px;
-}
-
-.profile-header h1 {
-    font-size: 32px;
-    margin-bottom: 5px;
-}
-
-.profile-posts h2 {
-    margin-bottom: 20px;
-}
-
-/* =========================
-   POSTS SECTION
-   ========================= */
-
-.posts {
-    width: 92%;
-    max-width: 1150px;
-    margin: 60px auto;
-}
-
-.posts-header h2 {
-    font-size: 28px;
-    margin-bottom: 30px;
-    font-weight: 600;
-    color: #1f1f1f;
-}
-
-/* GRID */
-
-.posts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 24px;
-}
-
-/* CARD */
-
-.post-card {
-    background: white;
-    padding: 22px;
-
-    border-radius: 20px;
-
-    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-
-    transition: all 0.2s ease;
-
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-
-    position: relative;
-    overflow: hidden;
-}
-
-.post-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 18px 40px rgba(0,0,0,0.08);
-}
-
-/* subtle top accent */
-
-.post-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, #6a5cff, #8f7bff);
-}
-
-/* TITLE */
-
-.post-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #2b2b2b;
-    text-decoration: none;
-    line-height: 1.3;
-}
-
-.post-title:hover {
-    color: #6a5cff;
-}
-
-/* CONTENT */
-
-.post-content {
-    font-size: 14px;
-    color: #555;
-    line-height: 1.6;
-}
-
-/* FOOTER */
-
-.post-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    margin-top: auto;
-}
-
-/* AUTHOR */
-
-.post-author {
-    font-size: 13px;
-    color: #6a5cff;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.post-author:hover {
-    text-decoration: underline;
-}
-
-/* DATE */
-
-.post-date {
-    font-size: 12px;
-    color: #999;
-}
-
-/* ACTIONS */
-
-.post-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* LIKE BUTTON */
-
-.like-btn {
-    font-size: 14px;
-    color: #666;
-    background: #f6f6f6;
-    padding: 6px 10px;
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.like-btn:hover {
-    background: #ffecec;
-    color: #e25555;
-}
-
-.like-btn.disabled {
-    opacity: 0.5;
-    cursor: pointer;
-}
-
-
-
-
-.comments {
-    border-top: 1px solid #eee;
-    padding-top: 16px;
-
-    max-height: 300px;
-    overflow-y: auto;
-
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-/* COMMENT */
-
-.comment {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-/* TEXT */
-
-.comment p {
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.4;
-    color: #2b2b2b;
-}
-
-.comment b {
-    font-weight: 600;
-    color: #111;
-}
-
-/* REPLY BUTTON */
-
-.reply-btn {
-    font-size: 12px;
-    color: #6a5cff;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    width: fit-content;
-
-    transition: 0.2s;
-}
-
-.reply-btn:hover {
-    text-decoration: underline;
-    color: #4d3df5;
-}
-
-/* THREAD LINE */
-
-.replies {
-    margin-left: 18px;
-    padding-left: 12px;
-    border-left: 2px solid #ddd;
-
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-/* LIMIT DEPTH */
-
-.replies .replies {
-    margin-left: 10px;
-}
-
-.replies .replies .replies {
-    margin-left: 0;
-    border-left: none;
-}
-
-/* INPUT */
-
-#commentForm {
-    margin-top: 20px;
-}
-
-#commentForm input {
-    width: 100%;
-    padding: 14px;
-
-    border-radius: 20px;
-    border: 1px solid #ddd;
-
-    font-size: 14px;
-    background: #fafafa;
-}
-
-#commentForm input:focus {
-    outline: none;
-    border-color: #6a5cff;
-    background: white;
-}
-
-#commentForm button {
-    margin-top: 10px;
-
-    padding: 10px 16px;
-    border-radius: 14px;
-
-    background: #6a5cff;
-    color: white;
-    border: none;
-    cursor: pointer;
-
-    transition: 0.2s;
-}
-
-#commentForm button:hover {
-    background: #5848e0;
-}
-
-/* SCROLLBAR */
-
-.comments::-webkit-scrollbar {
-    width: 6px;
-}
-
-.comments::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
-}
-
-
-/* =========================
-   FULL WIDTH POST MODAL
-   ========================= */
-
-.modal {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* ❗ не по центру вертикально */
-    padding: 40px 20px;
-}
-
-/* розтягуємо popup */
-
-.post-modal {
-    width: 100%;
-    max-width: 900px;   /* зроби 1000px якщо хочеш ще ширше */
-
-    margin: 0 auto;
-    padding: 30px;
-
-    display: flex;
-    flex-direction: column;
-
-    align-items: stretch; /* ❗ щоб не центрувало */
-}
-
-/* контент зліва */
-
-#postTitle {
-    text-align: left;
-}
-
-#postContent {
-    text-align: left;
-}
-
-.post-meta {
-    justify-content: flex-start;
-}
-
-/* коментарі на всю ширину */
-
-.comments {
-    width: 100%;
-}
-
-/* форма теж */
-
-#commentForm {
-    width: 100%;
-}
-
-#commentForm input {
-    width: 100%;
-}
-
-/* =========================
-   FIX POPUP LAYOUT
-   ========================= */
-
-/* затемнення фону */
-
-.modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-
-    display: flex;
-    justify-content: center;
-    align-items: center; /* повертаємо нормальне центрування */
-
-    padding: 20px;
-}
-
-/* сам popup */
-
-.post-modal {
-    background: white;
-
-    width: 100%;
-    max-width: 700px;   /* ❗ зробили нормальну ширину */
-
-    padding: 30px;
-    border-radius: 20px;
-
-    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-
-    display: flex;
-    flex-direction: column;
-}
-
-/* прибираємо зайве розтягування */
-
-.comments {
-    max-height: 300px;
-}
-
-/* щоб не було "вузької колонки" */
-
-body.modal-open {
-    overflow: hidden;
-}
-
-/* ---------- AUTH PAGES (login.html / register.html) ---------- */
-
-.auth-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 70vh;
-}
-
-.auth-box {
-    width: 380px;
-    background: white;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.auth-box input {
-    padding: 14px;
-    border-radius: 12px;
-    border: 1px solid #ddd;
-}
-
-.error {
-    color: #e74c3c;
-}
-
-.auth-link {
-    text-align: center;
-}
-
-
-/* ---------- MODAL (popup login/register) ---------- */
-
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-
-    display: none;
-
-    align-items: center;
-    justify-content: center;
-
-    background: rgba(0, 0, 0, 0.4);
-
-    z-index: 1000;
-}
+/* ---------- AUTH MODAL ---------- */
 
 .modal-content {
     width: 420px;
@@ -583,21 +86,20 @@ body.modal-open {
     gap: 18px;
 }
 
-.modal-title {
-    text-align: center;
+#modalTitle {
     font-size: 32px;
     font-weight: 700;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
-/* inputs */
+/* INPUTS */
 
 .modal-content input {
     width: 100%;
-    padding: 16px 16px;
+    padding: 16px;
 
     border-radius: 16px;
-   border: none;
+    border: none;
 
     background: #eef1f7;
 
@@ -605,14 +107,12 @@ body.modal-open {
 
     outline: none;
 
-    margin-bottom: 12px;
-    /* 👈 ось це додає відступ */
-     box-sizing: border-box;
+    margin-bottom: 10px;
 }
 
-/* button */
+/* BUTTON */
 
-.modal-btn {
+#modalButton {
     width: 100%;
 
     padding: 16px;
@@ -628,16 +128,16 @@ body.modal-open {
     font-weight: 600;
 
     cursor: pointer;
-    margin-top: 8px;
+
     transition: 0.2s;
 }
 
-.modal-btn:hover {
+#modalButton:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 25px rgba(108, 99, 255, 0.3);
 }
 
-/* close */
+/* CLOSE BUTTON */
 
 .close-btn {
     position: absolute;
@@ -645,72 +145,244 @@ body.modal-open {
     right: 22px;
 
     font-size: 20px;
+    cursor: pointer;
 }
 
-/* switch text */
+/* SWITCH TEXT */
 
-.modal-register {
-    text-align: center;
-    font-size: 15px;
-    margin-top: 10px;
+#modalSwitchText {
+    font-size: 14px;
+    color: #666;
 }
 
-.modal-register a {
+#modalSwitchText a {
     color: #6c63ff;
     font-weight: 600;
+    cursor: pointer;
 }
-
-/* hidden */
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
+/* POSTS */
 
-#usernameField {
-    width: 100%;
+.posts {
+    width: 92%;
+    max-width: 1150px;
+    margin: 60px auto;
 }
 
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+}
 
-/*post*/
-.post-modal {
-    max-width: 650px;
-    width: 100%;
-    padding: 30px;
-    border-radius: 24px;
+.post-card {
     background: white;
-
+    padding: 22px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
-
-    max-height: 85vh;
+    gap: 14px;
+    transition: 0.2s;
 }
 
-
-.comments {
-    flex: 1;              
-    overflow-y: auto;
-    margin: 15px 0;
+.post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
 }
+
+.post-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2b2b2b;
+    text-decoration: none;
+}
+
+.post-content {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.post-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
+}
+
+/* LIKE BUTTON */
+
+.like-btn {
+    font-size: 14px;
+    color: #666;
+
+    background: #f6f6f6;
+    padding: 6px 10px;
+
+    border-radius: 12px;
+    border: none;
+
+    cursor: pointer;
+    transition: 0.2s;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.like-btn:hover {
+    background: #ffecec;
+    color: #e25555;
+}
+
+.like-btn.liked {
+    background: #ffecec;
+    color: #e25555;
+}
+
+.like-count {
+    font-size: 13px;
+    color: #888;
+}
+
+/* MODAL */
 
 .modal {
     position: fixed;
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-
-    display: flex;
+    inset: 0;
+    display: none;
     justify-content: center;
     align-items: center;
-
     background: rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+}
+
+.modal-content {
+    width: 420px;
+    background: white;
+    padding: 50px 40px;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* POST MODAL */
+
+.post-modal {
+    background: white;
+    width: 100%;
+    max-width: 650px;
+    padding: 20px 30px 30px;
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    max-height: 85vh;
+}
+
+.posts {
+    width: 92%;
+    max-width: 1150px;
+    margin: 60px auto;
+}
+
+.posts-header h2 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    font-weight: 600;
+    color: #1f1f1f;
+}
+
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.post-card {
+    background: white;
+    padding: 22px;
+
+    border-radius: 20px;
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+
+    transition: all 0.2s ease;
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    position: relative;
+    overflow: hidden;
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* top line accent */
+
+.post-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #6a5cff, #8f7bff);
+}
+
+.post-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2b2b2b;
+    line-height: 1.3;
+}
+
+.post-title:hover {
+    color: #6a5cff;
+}
+
+.post-content {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.post-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.post-author {
+    font-size: 13px;
+    color: #6a5cff;
+    font-weight: 500;
+}
+
+.post-date {
+    font-size: 12px;
+    color: #999;
+}
+
+.post-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 #postTitle {
     font-size: 24px;
     font-weight: 600;
+    margin-top: 0;
     margin-bottom: 10px;
     text-align: center;
 }
@@ -719,7 +391,7 @@ body.modal-open {
     font-size: 15px;
     line-height: 1.6;
     color: #444;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     text-align: center;
 }
 
@@ -731,67 +403,95 @@ body.modal-open {
     font-size: 13px;
     color: #888;
 
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
+
+/* COMMENTS */
+
+.comments {
+    flex: 1;
+    overflow-y: auto;
+
+    margin: 10px 0;
+
+    border-top: 1px solid #eee;
+    padding-top: 12px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    max-height: none;
+    /* 🔥 прибрати обмеження */
+}
+
+.comment {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.comment p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.reply-btn {
+    font-size: 12px;
+    color: #6a5cff;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.comment-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+/* FORM */
 
 #commentForm {
     display: flex;
-    align-items: center;   /* 🔥 головне */
     gap: 10px;
+    margin-top: 20px;
 }
 
 #commentForm input {
     flex: 1;
-    height: 45px;          /* щоб співпадало */
+    height: 45px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    padding: 0 14px;
 }
 
 #commentForm button {
-    height: 45px;          /* 🔥 та сама висота */
+    height: 45px;
     padding: 0 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border-radius: 14px;
+    background: #6a5cff;
+    color: white;
+    border: none;
+    cursor: pointer;
 }
 
-.comment-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 4px;
+
+
+.close-btn {
+    cursor: pointer;   /* 🔥 оце головне */
 }
 
-.like-btn, .reply-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  color: #666;
-}
 
-.like-btn {
-  display: inline-block;
-  width: auto;
-}
 
-.like-btn.liked {
-  color: #6c5ce7;
-  font-weight: 600;
-}
-
-.like-count {
-  font-size: 13px;
-  color: #888;
-}
+/* FOOTER */
 
 footer {
     margin-top: 60px;
     padding: 15px 0;
-
     text-align: center;
-
     font-size: 14px;
     color: #777;
-
     border-top: 1px solid #e0e0e0;
     background: #f9f9fb;
 }
