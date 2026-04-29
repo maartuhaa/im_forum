@@ -56,7 +56,7 @@ Applikasjonen lar elever opprette innlegg, samhandle med andre og utforske temae
 
 ---
 
-## 🔐 Cybersikkerhet – Yrkesfaglig fordypning
+## Cybersikkerhet – Yrkesfaglig fordypning
 
 I dette prosjektet har jeg brukt grunnleggende prinsipper fra cybersikkerhet for å gjøre forumet sikrere.
 
