@@ -1,4 +1,4 @@
-MYSQL_HOST = "192.168.10.31"
+MYSQL_HOST = "10.0.0.31"
 MYSQL_USER = "forum_user"
 MYSQL_PASSWORD = "forum123"
 MYSQL_DB = "im_forum"
