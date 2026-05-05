@@ -25,23 +25,23 @@
 
         <ul class="nav-links">
             <li><a href="/">Hjem</a></li>
-            <li><a href="#">Innlegg</a></li>
+            <li><a href="/posts">Innlegg</a></li>
             <li><a href="#">Temaer</a></li>
         </ul>
 
         <div class="nav-right">
 
-            {% if session.get("user_id") %}
+            {% if session.get("user_id") %} <!-- якщо юзер залогінений -->
 
             <a href="/user/{{ session.username }}" class="user-greeting">
-                Hei, {{ session.username }}
+                Hei, {{ session.username }}  <!-- показує username -->
             </a>
 
             <a class="new-post-btn" href="/create_post">Ny post</a>
 
             <a class="logout-btn" href="/logout">Logg ut</a>
 
-            {% else %}
+            {% else %} <!-- якщо НЕ залогінений -->
 
             <button class="login-btn" onclick="openLogin()">Logg inn</button>
 
@@ -113,7 +113,7 @@
             <div id="commentsContainer" class="comments"></div>
 
             <!-- COMMENT FORM -->
-            {% if session.get("user_id") %}
+            {% if session.get("user_id") %} <!-- тільки для залогінених -->
 
             <form id="commentForm">
                 <input type="text" name="content" placeholder="Write a comment..." required>

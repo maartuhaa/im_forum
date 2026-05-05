@@ -1,7 +1,7 @@
-MYSQL_HOST = "localhost"
+MYSQL_HOST = "192.168.10.31"
 MYSQL_USER = "forum_user"
 MYSQL_PASSWORD = "forum123"
 MYSQL_DB = "im_forum"
-MYSQL_PORT = 3307
+MYSQL_PORT = 3306
 
 SECRET_KEY = "secret123"

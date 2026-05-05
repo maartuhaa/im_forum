@@ -37,11 +37,11 @@ function updateModal() {
     button.innerText = "Logg inn";
     form.action = "/login";
 
-    // ❌ без username
+    // без username
     username.classList.add("hidden");
     username.removeAttribute("required");
 
-    // ✔ текст
+    // текст
     text.innerText = "Har du ikke konto?";
     link.innerText = "Registrer";
 
@@ -50,11 +50,11 @@ function updateModal() {
     button.innerText = "Registrer";
     form.action = "/register";
 
-    // ✔ з username
+    // з username
     username.classList.remove("hidden");
     username.setAttribute("required", true);
 
-    // ✔ текст
+    // текст
     text.innerText = "Har du allerede konto?";
     link.innerText = "Logg inn";
   }
@@ -67,7 +67,7 @@ let currentPostId = null;
 let replyToCommentId = null;
 
 function openPost(title, content, author, date, post_id) {
-  currentPostId = post_id;
+  currentPostId = post_id; // запам’ятовуємо який пост відкрили
 
   document.getElementById("postTitle").innerText = title;
   document.getElementById("postContent").innerText = content;
@@ -82,7 +82,7 @@ function openPost(title, content, author, date, post_id) {
   const container = document.getElementById("commentsContainer");
   container.innerHTML = "";
 
-  fetch(`/comments/${post_id}`)
+  fetch(`/comments/${post_id}`)  // GET запит до Flask API
     .then(res => res.json())
     .then(comments => {
       comments.forEach(renderComment);
@@ -97,7 +97,7 @@ function closePost() {
 
 // ---------------- LIKE POST ----------------
 function likePost(postId) {
-  fetch(`/like/${postId}`)
+  fetch(`/like/${postId}`) // запит на лайк
     .then(res => res.json())
     .then(data => {
       const el = document.getElementById(`likes-${postId}`);
@@ -105,19 +105,17 @@ function likePost(postId) {
 
       const btn = el.closest(".like-btn");
 
-      btn.classList.toggle("liked", data.liked);
+      btn.classList.toggle("liked", data.liked); // додає/знімає клас liked
     });
 }
 
-
 // ---------------- LIKE COMMENT ----------------
-
-function likeComment(commentId) {
-  fetch(`/like_comment/${commentId}`)
+function likeComment(commentId) { 
+  fetch(`/like_comment/${commentId}`) // запит до Flask
     .then(res => res.json())
     .then(data => {
 
-      if (data.error) {
+      if (data.error) { // якщо не авторизований відкриваємо login modal
         openLogin();
         return;
       }
@@ -125,7 +123,7 @@ function likeComment(commentId) {
       const el = document.getElementById(`comment-likes-${commentId}`);
       el.innerText = data.count;
 
-      const btn = el.previousSibling;
+      const btn = el.previousSibling; // кнопка лайка
 
       btn.classList.toggle("liked", data.liked);
     });
@@ -134,7 +132,7 @@ function likeComment(commentId) {
 // ---------------- REPLY ----------------
 
 function replyTo(commentId) {
-  replyToCommentId = commentId;
+  replyToCommentId = commentId; // запам’ятовуємо кому відповідаємо
 
   const input = document.querySelector("#commentForm input");
   input.placeholder = "Replying...";
@@ -240,7 +238,7 @@ document.addEventListener("submit", function (e) {
         return;
       }
 
-      renderComment(data); // 🔥 замість дублювання
+      renderComment(data); //
 
       input.value = "";
       input.placeholder = "Write a comment...";
@@ -248,3 +246,58 @@ document.addEventListener("submit", function (e) {
     });
 });
 
+// ---------------- INLINE REPLY ----------------
+let replyToId = null;
+
+function replyToInline(commentId) {
+  replyToId = commentId;
+
+  const input = document.querySelector(`#post-${commentId} input`) 
+             || document.querySelector(".comment-form input");
+
+  if (input) {
+    input.placeholder = "Replying...";
+    input.focus();
+  }
+}
+
+function submitInlineComment(e, postId) {
+  e.preventDefault();
+
+  const form = e.target;
+  const input = form.querySelector("input");
+
+  const formData = new FormData();
+  formData.append("content", input.value);
+
+  if (replyToId) {
+    formData.append("parent_id", replyToId);
+  }
+
+  fetch(`/comment/${postId}`, {
+    method: "POST",
+    body: formData
+  })
+    .then(res => res.json())
+    .then(data => {
+
+      if (data.error) {
+        openLogin();
+        return;
+      }
+
+      const div = document.createElement("div");
+      div.classList.add("comment");
+      div.innerHTML = `<b>${data.username}</b>: ${data.content}`;
+
+      if (replyToId) {
+        document.getElementById(`replies-${replyToId}`).appendChild(div);
+      } else {
+        form.parentElement.insertBefore(div, form);
+      }
+
+      input.value = "";
+      input.placeholder = "Write a comment...";
+      replyToId = null;
+    });
+}

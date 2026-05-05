@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="feed-title">Alle innlegg</h2>
+
+<section class="feed-wrapper innlegg-page">
+    <div class="feed-container">
+
+        {% for post in posts %}
+
+        <div class="feed-post" id="post-{{ post.id }}">
+
+            <!-- HEADER -->
+            <div class="post-header">
+                <span class="post-user">{{ post.username }}</span>
+                <span class="post-date">{{ post.created_at }}</span>
+            </div>
+
+            <!-- TITLE -->
+            <div class="post-title">{{ post.title }}</div>
+
+            <!-- CONTENT -->
+            <div class="post-content">{{ post.content }}</div>
+
+            <!-- COMMENTS (перші 2) -->
+            <div class="comments">
+
+                {% for c in post.preview_comments %}
+                <div class="comment">
+                    <div class="comment-line">
+                        <span class="comment-user">{{ c.username }}</span>
+                        <span class="comment-text">{{ c.content }}</span>
+                    </div>
+
+                    <div class="comment-actions">
+                        <button onclick="replyToInline({{ c.id }})">Reply</button>
+                        <button onclick="likeComment({{ c.id }})">Like</button>
+                        <span id="comment-likes-{{ c.id }}">{{ c.likes_count or 0 }}</span>
+                    </div>
+
+                    <div class="replies" id="replies-{{ c.id }}"></div>
+                </div>
+                {% endfor %}
+
+                {% if post.all_comments|length > 2 %}
+                <div class="more-comments" onclick="openPost(
+                    '{{ post.title|escape }}',
+                    '{{ post.content|escape }}',
+                    '{{ post.username }}',
+                    '{{ post.created_at }}',
+                    {{ post.id }}
+                )">
+                    Se flere kommentarer
+                </div>
+                {% endif %}
+
+                {% if session.get("user_id") %}
+                <form class="comment-form" onsubmit="submitInlineComment(event, {{ post.id }})">
+                    <input type="text" name="content" placeholder="Write a comment..." required>
+                    <button type="submit">Send</button>
+                </form>
+                {% endif %}
+
+            </div>
+
+            <!-- LIKE POST -->
+            <div class="post-actions">
+                    {% if session.get("user_id") %}
+
+                    <button class="like-btn" onclick="likePost({{ post.id }})">
+                        ❤️ <span id="likes-{{ post.id }}">{{ post.likes }}</span>
+                    </button>
+
+                    {% else %}
+
+                    <button class="like-btn disabled" onclick="openLogin()">
+                        ❤️ {{ post.likes }}
+                    </button>
+
+                    {% endif %}
+                </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+</section>
+
+{% endblock %}

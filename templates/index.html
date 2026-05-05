@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block content %} <!-- вставляємо контент в base.html -->
+
 
 <!-- ERROR MESSAGES -->
 {% if request.args.get("error") == "email" %}
 <div class="error-msg">E-post finnes allerede</div>
 {% endif %}
 
-{% if request.args.get("error") == "login" %}
+{% if request.args.get("error") == "login" %} <!-- перевірка помилки логіну -->
 <div class="error-msg">Feil e-post eller passord</div>
 {% endif %}
 

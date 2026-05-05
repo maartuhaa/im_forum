@@ -282,6 +282,7 @@ body {
     display: flex;
     flex-direction: column;
     max-height: 85vh;
+    align-items: stretch;
 }
 
 .posts {
@@ -388,11 +389,12 @@ body {
 }
 
 #postContent {
+    text-align: center;        
     font-size: 15px;
-    line-height: 1.6;
     color: #444;
-    margin-bottom: 15px;
-    text-align: center;
+    max-width: 600px;
+    margin: 10px auto 20px auto;
+    line-height: 1.5;
 }
 
 .post-meta {
@@ -422,13 +424,14 @@ body {
     gap: 14px;
 
     max-height: none;
-    /* 🔥 прибрати обмеження */
+    width: 100%;
 }
 
 .comment {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    width: 100%;
 }
 
 .comment p {
@@ -476,16 +479,160 @@ body {
     cursor: pointer;
 }
 
-
-
 .close-btn {
-    cursor: pointer;   /* 🔥 оце головне */
+    cursor: pointer;   
+}
+
+.replies {
+    margin-left: 20px;
+    padding-left: 12px;
+    border-left: 2px solid #ddd;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 
+/* innlegg */
+.feed-title {
+    display: flex;
+    justify-content: center;
+}
+
+.innlegg-page .feed-container {
+    width: 700px;
+    margin: 0 auto;
+}
+
+.innlegg-page .feed-post {
+    padding: 16px 20px;
+    border-radius: 16px;
+    background: #fff;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+/* header */
+.innlegg-page .post-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.innlegg-page .post-user {
+    font-weight: 700;
+    font-size: 14px;
+    color: #111;
+}
+
+.innlegg-page .post-date {
+    font-size: 12px;
+    color: #888;
+}
+
+/* title */
+.innlegg-page .post-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.innlegg-page .post-content {
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 12px;
+}
+
+/* comments */
+.innlegg-page .comments {
+    margin-top: 10px;
+    padding-left: 10px;
+    border-left: 2px solid #f0f0f0;
+}
+
+.innlegg-page .comment {
+    margin-bottom: 10px;
+}
+
+.innlegg-page .comment-line {
+    display: flex;
+    gap: 6px;
+}
+
+.innlegg-page .comment-user {
+    font-weight: 600;
+    color: #111;
+}
+
+.innlegg-page .comment-text {
+    color: #444;
+}
+
+.innlegg-page .comment-actions {
+    margin-top: 2px;
+    font-size: 12px;
+}
+
+.innlegg-page .comment-actions button {
+    background: none;
+    border: none;
+    color: #6a5cff;
+    cursor: pointer;
+    padding: 0;
+    margin-right: 8px;
+}
+
+.innlegg-page .more-comments {
+    margin: 6px 0;
+    color: #6a5cff;
+    font-size: 13px;
+    cursor: pointer;
+}
+/* form */
+.innlegg-page .comment-form {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.innlegg-page .comment-form {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.innlegg-page .comment-form input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+}
+
+.innlegg-page .comment-form button {
+    background: linear-gradient(45deg, #6a5cff, #8b7bff);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+/* likes */
+.innlegg-page .post-actions {
+    margin-top: 10px;
+}
+
+.innlegg-page .post-actions button {
+    background: #f5f5f7;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+}
 
 /* FOOTER */
-
 footer {
     margin-top: 60px;
     padding: 15px 0;
