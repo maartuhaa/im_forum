@@ -26,7 +26,7 @@
         <ul class="nav-links">
             <li><a href="/">Hjem</a></li>
             <li><a href="/posts">Innlegg</a></li>
-            <li><a href="#">Temaer</a></li>
+            <li><a href="/themes">Temaer</a></li>
         </ul>
 
         <div class="nav-right">
@@ -34,10 +34,10 @@
             {% if session.get("user_id") %} <!-- якщо юзер залогінений -->
 
             <a href="/user/{{ session.username }}" class="user-greeting">
-                Hei, {{ session.username }}  <!-- показує username -->
+                Hei, {{ session.username }} <!-- показує username -->
             </a>
 
-            <a class="new-post-btn" href="/create_post">Ny post</a>
+            <button class="new-post-btn" onclick="openCreatePost()">Ny post</button>
 
             <a class="logout-btn" href="/logout">Logg ut</a>
 
@@ -129,6 +129,58 @@
             {% endif %}
 
         </div>
+
+    </div>
+
+    <div id="createPostModal" class="modal">
+
+        <div class="create-post">
+
+            <!-- HEADER -->
+            <div class="create-header">
+                <span class="cancel" onclick="closeCreatePost()">Avbryt</span>
+
+                <h2 class="header-title">Nytt innlegg</h2>
+
+                <button id="publishBtn" onclick="submitPost()" disabled>
+                    Publiser
+                </button>
+            </div>
+            
+            <div class="create-body">
+
+                <div class="create-user">
+                    <div class="avatar"></div>
+
+                    <div class="user-info">
+                        <b>{{ session.username }}</b>
+
+                        <div class="theme-picker" onclick="toggleThemeList()">
+                            <span id="selectedTheme">Velg tema</span> ⌄
+                        </div>
+                    </div>
+                </div>
+
+                <textarea id="postContentInput" placeholder="Hva tenker du på?" oninput="handlePostInput()"></textarea>
+
+                <div id="themeList" class="theme-list hidden">
+                    {% for theme in themes %}
+                    <div onclick="selectTheme({{ theme.id }}, '{{ theme.name }}')">
+                        {{ theme.name }}
+                    </div>
+                    {% endfor %}
+
+                    <div class="new-theme">
+                        <input id="newThemeInput" placeholder="Ny tema..." />
+                        <button onclick="createTheme()">+</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
     </div>
 

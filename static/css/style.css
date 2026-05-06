@@ -5,7 +5,6 @@
 body {
     font-family: 'Inter', sans-serif;
     background: #f5f5f7;
-    margin: 0;
 }
 
 /* HERO */
@@ -389,7 +388,7 @@ body {
 }
 
 #postContent {
-    text-align: center;        
+    text-align: center;
     font-size: 15px;
     color: #444;
     max-width: 600px;
@@ -480,7 +479,7 @@ body {
 }
 
 .close-btn {
-    cursor: pointer;   
+    cursor: pointer;
 }
 
 .replies {
@@ -510,7 +509,7 @@ body {
     border-radius: 16px;
     background: #fff;
     margin-bottom: 14px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 /* header */
@@ -589,6 +588,7 @@ body {
     font-size: 13px;
     cursor: pointer;
 }
+
 /* form */
 .innlegg-page .comment-form {
     display: flex;
@@ -607,6 +607,16 @@ body {
     padding: 10px;
     border-radius: 20px;
     border: 1px solid #ddd;
+}
+
+.innlegg-page .replies {
+    margin-left: 20px;
+    padding-left: 12px;
+    border-left: 2px solid #ddd;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .innlegg-page .comment-form button {
@@ -632,13 +642,209 @@ body {
     font-size: 14px;
 }
 
-/* FOOTER */
-footer {
-    margin-top: 60px;
-    padding: 15px 0;
-    text-align: center;
+
+/* ny post */
+
+.create-post {
+    width: 520px;
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+}
+
+.create-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 12px;
+}
+
+.create-header .cancel {
     font-size: 14px;
+    color: #666;
+    cursor: pointer;
+}
+
+.create-header .cancel:hover {
+    color: #000;
+}
+
+.header-title {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+#publishBtn {
+    background: #6c63ff;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#publishBtn:disabled {
+    background: #ddd;
+    color: #888;
+    cursor: not-allowed;
+}
+
+.create-body {
+    margin-top: 16px;
+}
+
+.create-user {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #ccc;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    position: relative; 
+}
+
+.user-info b {
+    font-size: 14px;
+}
+
+.theme-picker {
+    font-size: 13px;
     color: #777;
-    border-top: 1px solid #e0e0e0;
-    background: #f9f9fb;
+    cursor: pointer;
+}
+
+.theme-picker:hover {
+    color: #000;
+}
+
+#postContentInput {
+    width: 100%;
+    border: none;
+    outline: none;
+    resize: none;
+    margin-top: 14px;
+    font-size: 16px;
+    min-height: 90px;
+}
+
+.theme-list {
+    position: absolute;
+    background: white;
+    border-radius: 10px;
+    padding: 8px;
+    margin-top: 6px;
+    width: 200px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.theme-list div {
+    padding: 6px;
+    cursor: pointer;
+}
+
+.theme-list div:hover {
+    background: #f5f5f5;
+}
+
+.new-theme {
+    display: flex;
+    gap: 5px;
+    margin-top: 6px;
+}
+
+.new-theme input {
+    flex: 1;
+    padding: 4px;
+}
+
+.hidden {
+    display: none;
+}
+
+
+/* ---------- THEMES PAGE ---------- */
+
+.themes-page {
+    width: 92%;
+    max-width: 1200px;
+    margin: 60px auto;
+}
+
+.themes-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.themes-header h1 {
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+.themes-header p {
+    color: #777;
+    font-size: 16px;
+}
+
+.themes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+}
+
+.theme-card {
+    background: white;
+    border-radius: 22px;
+    padding: 28px;
+
+    text-decoration: none;
+
+    color: #111;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+
+    transition: 0.2s;
+
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-card::before {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 4px;
+
+    background: linear-gradient(90deg, #6c63ff, #8f7bff);
+}
+
+.theme-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.08);
+}
+
+.theme-name {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.theme-count {
+    color: #777;
+    font-size: 14px;
 }

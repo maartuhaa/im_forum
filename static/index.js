@@ -66,11 +66,11 @@ function updateModal() {
 let currentPostId = null;
 let replyToCommentId = null;
 
-function openPost(title, content, author, date, post_id) {
+function openPost(content, author, date, post_id) {
   currentPostId = post_id; // запам’ятовуємо який пост відкрили
 
-  document.getElementById("postTitle").innerText = title;
-  document.getElementById("postContent").innerText = content;
+  document.getElementById("postTitle").innerText = content;
+  document.getElementById("postContent").innerText = "";
   document.getElementById("postAuthor").innerText = author;
   document.getElementById("postDate").innerText = date;
 
@@ -299,5 +299,102 @@ function submitInlineComment(e, postId) {
       input.value = "";
       input.placeholder = "Write a comment...";
       replyToId = null;
+    });
+}
+
+
+let selectedThemeId = null;
+
+// ---------------- OPEN / CLOSE ----------------
+
+function openCreatePost() {
+    document.getElementById("createPostModal").style.display = "flex";
+}
+
+function closeCreatePost() {
+    document.getElementById("createPostModal").style.display = "none";
+
+    document.getElementById("postContentInput").value = "";
+    document.getElementById("selectedTheme").innerText = "Velg tema";
+
+    selectedThemeId = null;
+    document.getElementById("publishBtn").disabled = true;
+}
+
+// ---------------- INPUT CONTROL ----------------
+
+function handlePostInput() {
+    const content = document.getElementById("postContentInput").value.trim();
+
+    const btn = document.getElementById("publishBtn");
+
+    if (content && selectedThemeId) {
+        btn.disabled = false;
+    } else {
+        btn.disabled = true;
+    }
+}
+
+// ---------------- THEME DROPDOWN ----------------
+
+function toggleThemeList() {
+    document.getElementById("themeList").classList.toggle("hidden");
+}
+
+function selectTheme(id, name) {
+    selectedThemeId = id;
+
+    document.getElementById("selectedTheme").innerText = name;
+    document.getElementById("themeList").classList.add("hidden");
+
+    handlePostInput();
+}
+
+// ---------------- CREATE NEW THEME ----------------
+
+function createTheme() {
+    const input = document.getElementById("newThemeInput");
+    const name = input.value.trim();
+
+    if (!name) return;
+
+    fetch("/create_theme", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `name=${encodeURIComponent(name)}`
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        selectedThemeId = data.id;
+
+        document.getElementById("selectedTheme").innerText = data.name;
+        document.getElementById("themeList").classList.add("hidden");
+
+        input.value = "";
+
+        handlePostInput();
+    });
+}
+
+// ---------------- SUBMIT POST ----------------
+
+function submitPost() {
+    const content = document.getElementById("postContentInput").value;
+
+    if (!content.trim() || !selectedThemeId) return;
+
+    fetch("/create_post", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `content=${encodeURIComponent(content)}&theme_id=${selectedThemeId}`
+    })
+    .then(() => {
+        closeCreatePost();
+        location.reload();
     });
 }

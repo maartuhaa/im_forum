@@ -3,8 +3,8 @@
 
 <h2 class="feed-title">Alle innlegg</h2>
 
-<section class="feed-wrapper innlegg-page">
-    <div class="feed-container">
+<section class="feed-wrapper">
+    <div class="feed-container innlegg-page">
 
         {% for post in posts %}
 
@@ -44,12 +44,12 @@
 
                 {% if post.all_comments|length > 2 %}
                 <div class="more-comments" onclick="openPost(
-                    '{{ post.title|escape }}',
-                    '{{ post.content|escape }}',
-                    '{{ post.username }}',
-                    '{{ post.created_at }}',
-                    {{ post.id }}
-                )">
+            '{{ post.title|escape }}',
+            '{{ post.content|escape }}',
+            '{{ post.username }}',
+            '{{ post.created_at }}',
+            {{ post.id }}
+        )">
                     Se flere kommentarer
                 </div>
                 {% endif %}
@@ -65,20 +65,10 @@
 
             <!-- LIKE POST -->
             <div class="post-actions">
-                    {% if session.get("user_id") %}
-
-                    <button class="like-btn" onclick="likePost({{ post.id }})">
-                        ❤️ <span id="likes-{{ post.id }}">{{ post.likes }}</span>
-                    </button>
-
-                    {% else %}
-
-                    <button class="like-btn disabled" onclick="openLogin()">
-                        ❤️ {{ post.likes }}
-                    </button>
-
-                    {% endif %}
-                </div>
+                <button onclick="likePost(event, {{ post.id }})">
+                    ❤️ <span id="likes-{{ post.id }}">{{ post.likes or 0 }}</span>
+                </button>
+            </div>
 
         </div>
 

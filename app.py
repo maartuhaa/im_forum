@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session # Flask — фреймворк; render_template HTML; request дані з форми; redirect — перекидання; session — зберігає логін
+from flask import Flask, render_template, request, redirect, session # Flask фреймворк, render_template HTML, request дані з форми, redirect перекидання, session зберігає логін
 import mysql.connector
 from flask import jsonify # повертає дані у форматі JSON (для JS)
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -25,44 +25,48 @@ def home():
     cur = conn.cursor(dictionary=True)
 
     user_id = session.get("user_id", 0)
+
 # всі пости + лайки
-    cur.execute("""  
-        SELECT   
+    cur.execute("""
+        SELECT
             posts.id,
-            posts.title,
             posts.content,
             posts.created_at,
             users.username,
-
-            COUNT(post_likes.id) as likes,
-
-            MAX(CASE WHEN post_likes.user_id = %s THEN 1 ELSE 0 END) as liked
-
+            themes.name AS theme_name,
+       
+            COUNT(post_likes.id) as likes
+       
         FROM posts
         JOIN users ON posts.user_id = users.id
         LEFT JOIN post_likes ON posts.id = post_likes.post_id
-
+        LEFT JOIN themes ON posts.theme_id = themes.id
+       
         GROUP BY posts.id
         ORDER BY posts.created_at DESC
-    """, (user_id,))
+    """)
 
     posts = cur.fetchall()  # отримуємо всі пости
+
 # останні 6 постів
     cur.execute("""
         SELECT
             posts.id,
-            posts.title,
             posts.content,
             posts.created_at,
-            users.username
+            users.username,
+            themes.name AS theme_name
+                
         FROM posts
         JOIN users ON posts.user_id = users.id
+        LEFT JOIN themes ON posts.theme_id = themes.id
         ORDER BY posts.created_at DESC
         LIMIT 6
     """)
 
     latest_posts = cur.fetchall()
 
+# всі коментарі
     cur.execute("""
         SELECT
             comments.post_id,
@@ -76,13 +80,19 @@ def home():
 
     comments = cur.fetchall()
 
+#  теми для dropdown (create post popup)
+    cur.execute("SELECT * FROM themes")
+    themes = cur.fetchall()
+
     conn.close()
+
  # передаємо все в HTML
     return render_template( 
         "index.html",
         posts=posts,
         comments=comments,
-        latest_posts=latest_posts  
+        latest_posts=latest_posts,
+        themes=themes   
     )
 
 
@@ -326,10 +336,10 @@ def posts_page():
     cur.execute("""
         SELECT
             posts.id,
-            posts.title,
             posts.content,
             posts.created_at,
             users.username,
+            themes.name AS theme_name,
 
             COUNT(post_likes.id) as likes,
             MAX(CASE WHEN post_likes.user_id = %s THEN 1 ELSE 0 END) as liked
@@ -337,6 +347,7 @@ def posts_page():
         FROM posts
         JOIN users ON posts.user_id = users.id
         LEFT JOIN post_likes ON posts.id = post_likes.post_id
+        LEFT JOIN themes ON posts.theme_id = themes.id
 
         GROUP BY posts.id
         ORDER BY posts.created_at DESC
@@ -364,5 +375,128 @@ def posts_page():
 
     return render_template("posts.html", posts=posts)
 
+
+@app.route("/create_post", methods=["POST"])
+def create_post():
+
+    if "user_id" not in session:
+        return "Unauthorized", 401
+
+    content = request.form.get("content", "").strip()
+    theme_id = request.form.get("theme_id")
+
+    if not content or not theme_id:
+        return "Missing data", 400
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        INSERT INTO posts (content, user_id, theme_id)
+        VALUES (%s, %s, %s)
+    """, (
+        content,
+        session["user_id"],
+        theme_id
+    ))
+
+    conn.commit()
+    conn.close()
+
+    return "OK"
+
+@app.route("/create_theme", methods=["POST"])
+def create_theme():
+
+    name = request.form.get("name").strip()
+
+    if not name:
+        return jsonify({"error": "empty"}), 400
+
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+
+    # перевірка чи існує
+    cur.execute("SELECT * FROM themes WHERE name = %s", (name,))
+    existing = cur.fetchone()
+
+    if existing:
+        conn.close()
+        return jsonify(existing)
+
+    cur.execute("INSERT INTO themes (name) VALUES (%s)", (name,))
+    conn.commit()
+
+    theme_id = cur.lastrowid
+
+    conn.close()
+
+    return jsonify({
+        "id": theme_id,
+        "name": name
+    })
+
+@app.route("/themes")
+def themes_page():
+
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+
+    cur.execute("""
+        SELECT
+            themes.id,
+            themes.name,
+            COUNT(posts.id) AS post_count
+
+        FROM themes
+        LEFT JOIN posts ON themes.id = posts.theme_id
+
+        GROUP BY themes.id
+        ORDER BY themes.name ASC
+    """)
+
+    themes = cur.fetchall()
+
+    conn.close()
+
+    return render_template("themes.html", themes=themes)
+
+@app.route("/theme/<int:theme_id>")
+def single_theme(theme_id):
+
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+
+    cur.execute("SELECT * FROM themes WHERE id = %s", (theme_id,))
+    theme = cur.fetchone()
+
+    cur.execute("""
+        SELECT
+            posts.id,
+            posts.content,
+            posts.created_at,
+            users.username,
+            COUNT(post_likes.id) AS likes
+
+        FROM posts
+        JOIN users ON posts.user_id = users.id
+        LEFT JOIN post_likes ON posts.id = post_likes.post_id
+
+        WHERE posts.theme_id = %s
+
+        GROUP BY posts.id
+        ORDER BY posts.created_at DESC
+    """, (theme_id,))
+
+    posts = cur.fetchall()
+
+    conn.close()
+
+    return render_template(
+        "single_theme.html",
+        theme=theme,
+        posts=posts
+    )
+
 if __name__ == "__main__":
-    app.run(debug=True)  # запускає сервер (debug=True — показує помилки)
+    app.run(debug=True)  # запускає сервер (debug=True - показує помилки)
