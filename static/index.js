@@ -69,8 +69,8 @@ let replyToCommentId = null;
 function openPost(content, author, date, post_id) {
   currentPostId = post_id; // запам’ятовуємо який пост відкрили
 
-  document.getElementById("postTitle").innerText = content;
-  document.getElementById("postContent").innerText = "";
+  document.getElementById("postTitle").innerText = "";
+  document.getElementById("postContent").innerText = content;
   document.getElementById("postAuthor").innerText = author;
   document.getElementById("postDate").innerText = date;
 

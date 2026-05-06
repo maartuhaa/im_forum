@@ -471,23 +471,26 @@ def single_theme(theme_id):
     theme = cur.fetchone()
 
     cur.execute("""
-        SELECT
-            posts.id,
-            posts.content,
-            posts.created_at,
-            users.username,
-            COUNT(post_likes.id) AS likes
-
-        FROM posts
-        JOIN users ON posts.user_id = users.id
-        LEFT JOIN post_likes ON posts.id = post_likes.post_id
-
-        WHERE posts.theme_id = %s
-
-        GROUP BY posts.id
-        ORDER BY posts.created_at DESC
-    """, (theme_id,))
-
+          SELECT
+              posts.id,
+              posts.content,
+              posts.created_at,
+              users.username,
+              themes.name AS theme_name,
+                
+              COUNT(post_likes.id) AS likes
+      
+          FROM posts
+      
+          JOIN users ON posts.user_id = users.id
+          LEFT JOIN post_likes ON posts.id = post_likes.post_id
+          LEFT JOIN themes ON posts.theme_id = themes.id
+      
+          WHERE posts.theme_id = %s
+      
+          GROUP BY posts.id
+          ORDER BY posts.created_at DESC
+      """, (theme_id,))
     posts = cur.fetchall()
 
     conn.close()

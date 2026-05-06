@@ -11,12 +11,18 @@
     <div class="posts-grid">
 
         {% for post in posts %}
-
         <div class="post-card">
 
-            <div class="post-content">
+        <a href="javascript:void(0)" class="post-title" onclick="openPost(
+           '{{ post.content|escape }}',
+           '{{ post.username|escape }}',
+           '{{ post.created_at }}',
+           {{ post.id }}
+       )">
+
                 {{ post.content }}
-            </div>
+
+            </a>
 
             <div class="post-footer">
 
